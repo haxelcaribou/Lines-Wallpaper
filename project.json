@@ -1,4 +1,6 @@
 {
+	"contentrating" : "Everyone",
+	"description" : "Colorful lines that move across the screen",
 	"file" : "index.html",
 	"general" : 
 	{
@@ -106,6 +108,8 @@
 			}
 		}
 	},
+	"preview" : "preview.jpg",
+	"tags" : [ "Abstract" ],
 	"title" : "Lines",
 	"type" : "web",
 	"version" : 0
