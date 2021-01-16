@@ -6,6 +6,7 @@ const c = canvas.getContext("2d");
 // update line number without full reset
 // fix excessive max and min hsl values at high variances
 // add color support
+// switch speed from percent to pixel
 
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
@@ -61,7 +62,7 @@ function updateSpeed(pSpeed, speed) {
 function constructLines() {
   lines = [];
   let lineSize = canvas.height / wallpaperSettings.numLines;
-  let lineSpeed = Math.pow(wallpaperSettings.lineSpeed,2)
+  let lineSpeed = Math.pow(wallpaperSettings.lineSpeed,2);
   let i;
   for (i = 0; i < wallpaperSettings.numLines; i += 1) {
     let info = {
@@ -70,7 +71,7 @@ function constructLines() {
       y: i * lineSize,
       h: lineSize,
       p: Math.random(),
-      v: 1 / (5000 + Math.random() * 5000) * lineSpeed
+      v: 1 / (20000 + Math.random() * 20000) * lineSpeed
     };
     lines.push(info);
   }
