@@ -14,6 +14,13 @@ const colorSettings = {
   lVar: 50
 };
 
+var wallpaperSettings = {
+  numLines: 10,
+  newLineProb: 1 / 50,
+  lineSpeed: 500,
+  fps: 0,
+};
+
 var lines = [];
 
 function mod(n1, n2) {
@@ -33,16 +40,16 @@ function getColor() {
 
 function constructLines() {
   lines = [];
-  let lineSize = canvas.height / numLines;
+  let lineSize = canvas.height / wallpaperSettings.numLines;
   let i;
-  for (i = 0; i < numLines; i += 1) {
+  for (i = 0; i < wallpaperSettings.numLines; i += 1) {
     let info = {
       c1: getColor(),
       c2: getColor(),
       y: i * lineSize,
       h: lineSize,
       p: Math.random(),
-      v: 1 / (lineSpeed  + Math.random() * lineSpeed)
+      v: 1 / (wallpaperSettings.lineSpeed + Math.random() * wallpaperSettings.lineSpeed)
     };
     lines.push(info);
   }
@@ -52,7 +59,7 @@ function updateLines() {
   lines.forEach(function(l) {
     if (l.p > 0) {
       l.p -= l.v;
-    } else if (Math.random() <= newLineProb) {
+    } else if (Math.random() <= wallpaperSettings.newLineProb) {
       l.p = 1;
       l.c1 = l.c2;
       l.c2 = getColor();
@@ -71,9 +78,83 @@ function drawLines() {
 }
 
 function step() {
-  drawLines();
-  updateLines();
   window.requestAnimationFrame(step);
+
+  // Figure out how much time has passed since the last animation
+  let now = performance.now() / 1000;
+  let dt = Math.min(now - last, 1);
+  last = now;
+
+  // Abort updating the animation if we have reached the desired FPS
+  if (wallpaperSettings.fps > 0) {
+    fpsThreshold += dt;
+    if (fpsThreshold < 1.0 / wallpaperSettings.fps) {
+      return;
+    }
+    fpsThreshold -= 1.0 / wallpaperSettings.fps;
+  }
+
+  updateLines();
+  drawLines();
+}
+
+function rgbToHsl(r, g, b) {
+  let max = Math.max(r, g, b);
+  let min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+
+    h /= 6;
+  }
+
+  return [h, s, l];
+}
+
+window.wallpaperPropertyListener = {
+  applyGeneralProperties: function(properties) {
+    if (properties.fps) {
+      wallpaperSettings.fps = properties.fps;
+    }
+  },
+  applyUserProperties: function(properties) {
+    if (properties.color) {
+      let p = properties.color.value.split(" ");
+
+      let r = p[0];
+      let g = p[1];
+      let b = p[2];
+
+      let v = rgbToHsl(p[0], p[1], p[2]);
+
+      colorSettings.h = v[0];
+      colorSettings.s = v[1];
+      colorSettings.l = v[2];
+    }
+  },
+  if (properties.numlines) {
+    wallpaperSettings.numLines = properties.numlines.value;
+  },
+  if (properties.speed) {
+    let value = properties.speed.value;
+    wallpaperSettings.lineSpeed = value;
+  },
 }
 
 window.onResize = function() {
