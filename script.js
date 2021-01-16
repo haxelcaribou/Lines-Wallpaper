@@ -14,11 +14,11 @@ const colorSettings = {
   lVar: 50
 };
 
-var wallpaperSettings = {
+const wallpaperSettings = {
   numLines: 10,
   newLineProb: 1 / 50,
   lineSpeed: 500,
-  fps: 0,
+  fps: 0
 };
 
 var lines = [];
