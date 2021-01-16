@@ -5,6 +5,7 @@ const c = canvas.getContext("2d");
 // update color settings without full color reset
 // update line number without full reset
 // fix excessive max and min hsl values at high variances
+// add color support
 
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
