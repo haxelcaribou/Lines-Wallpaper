@@ -6,28 +6,47 @@
 		{
 			"color" : 
 			{
-				"index" : 1,
-				"order" : 101,
+				"index" : 3,
+				"order" : 103,
 				"text" : "Color",
 				"type" : "color",
 				"value" : "0.23137254901960785 0.5019607843137255 0.6823529411764706"
 			},
 			"colorsettings" : 
 			{
-				"index" : 2,
-				"order" : 102,
+				"index" : 4,
+				"order" : 104,
 				"text" : "Show Color Settings",
 				"type" : "bool",
 				"value" : true
+			},
+			"direction" : 
+			{
+				"index" : 2,
+				"options" : 
+				[
+					{
+						"label" : "Right to Left",
+						"value" : "rtl"
+					},
+					{
+						"label" : "Left to Right",
+						"value" : "ltr"
+					}
+				],
+				"order" : 102,
+				"text" : "Direction",
+				"type" : "combo",
+				"value" : "rtl"
 			},
 			"huerange" : 
 			{
 				"condition" : "colorsettings.value == true",
 				"fraction" : false,
-				"index" : 3,
+				"index" : 5,
 				"max" : 360,
 				"min" : 0,
-				"order" : 103,
+				"order" : 105,
 				"text" : "Hue Range",
 				"type" : "slider",
 				"value" : 120
@@ -36,10 +55,10 @@
 			{
 				"condition" : "colorsettings.value == true",
 				"fraction" : false,
-				"index" : 5,
+				"index" : 7,
 				"max" : 100,
 				"min" : 0,
-				"order" : 105,
+				"order" : 107,
 				"text" : "Lightness Range",
 				"type" : "slider",
 				"value" : 70
@@ -59,10 +78,10 @@
 			{
 				"condition" : "colorsettings.value == true",
 				"fraction" : false,
-				"index" : 4,
+				"index" : 6,
 				"max" : 100,
 				"min" : 0,
-				"order" : 104,
+				"order" : 106,
 				"text" : "Saturation Range",
 				"type" : "slider",
 				"value" : 70
@@ -73,6 +92,17 @@
 				"text" : "ui_browse_properties_scheme_color",
 				"type" : "color",
 				"value" : "0 0 0"
+			},
+			"speed" : 
+			{
+				"fraction" : false,
+				"index" : 1,
+				"max" : 10,
+				"min" : 1,
+				"order" : 101,
+				"text" : "Speed",
+				"type" : "slider",
+				"value" : 5
 			}
 		}
 	},

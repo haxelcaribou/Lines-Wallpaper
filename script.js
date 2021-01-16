@@ -2,8 +2,9 @@ const canvas = document.getElementById("canvas");
 const c = canvas.getContext("2d");
 
 // TODO
-// do the speed math
-// update display on variable change
+// update color settings without full color reset
+// update line number without full reset
+// fix excessive max and min hsl values at high variances
 
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
@@ -20,7 +21,8 @@ var colorSettings = {
 var wallpaperSettings = {
   numLines: 10,
   newLineProb: 1 / 50,
-  lineSpeed: 500,
+  lineSpeed: 2,
+  direction: "rtl",
   fps: 0
 };
 
@@ -48,9 +50,17 @@ function updateColors() {
   });
 }
 
+function updateSpeed(pSpeed, speed) {
+  let m = Math.pow(speed,2) / Math.pow(pSpeed,2);
+  lines.forEach(function(n) {
+    n.v *= m;
+  });
+}
+
 function constructLines() {
   lines = [];
   let lineSize = canvas.height / wallpaperSettings.numLines;
+  let lineSpeed = Math.pow(wallpaperSettings.lineSpeed,2)
   let i;
   for (i = 0; i < wallpaperSettings.numLines; i += 1) {
     let info = {
@@ -59,22 +69,34 @@ function constructLines() {
       y: i * lineSize,
       h: lineSize,
       p: Math.random(),
-      v: 1 / (wallpaperSettings.lineSpeed + Math.random() * wallpaperSettings.lineSpeed)
+      v: 1 / (5000 + Math.random() * 5000) * lineSpeed
     };
     lines.push(info);
   }
 }
 
 function updateLinePos() {
-  lines.forEach(function(n) {
-    if (n.p > 0) {
-      n.p -= n.v;
-    } else if (Math.random() <= wallpaperSettings.newLineProb) {
-      n.p = 1;
-      n.c1 = n.c2;
-      n.c2 = getColor();
-    }
-  });
+  if (wallpaperSettings.direction == "rtl") {
+    lines.forEach(function(n) {
+      if (n.p > 0) {
+        n.p -= n.v;
+      } else if (Math.random() <= wallpaperSettings.newLineProb) {
+        n.p = 1;
+        n.c1 = n.c2;
+        n.c2 = getColor();
+      }
+    });
+  } else {
+    lines.forEach(function(n) {
+      if (n.p < 1) {
+        n.p += n.v;
+      } else if (Math.random() <= wallpaperSettings.newLineProb) {
+        n.p = 0;
+        n.c2 = n.c1;
+        n.c1 = getColor();
+      }
+    });
+  }
 }
 
 function drawLines() {
@@ -164,8 +186,12 @@ window.wallpaperPropertyListener = {
       //wallpaperSettings.newLineProb = properties.temp.value;
     }
     if (properties.speed) {
-      let value = properties.speed.value;
-      wallpaperSettings.lineSpeed = value;
+      let pSpeed = wallpaperSettings.lineSpeed;
+      wallpaperSettings.lineSpeed = properties.speed.value;
+      updateSpeed(pSpeed, wallpaperSettings.lineSpeed);
+    }
+    if (properties.direction) {
+      wallpaperSettings.direction = properties.direction.value;
     }
     if (properties.huerange) {
       colorSettings.hVar = properties.huerange.value;
