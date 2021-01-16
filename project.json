@@ -1,0 +1,82 @@
+{
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"color" : 
+			{
+				"index" : 1,
+				"order" : 101,
+				"text" : "Color",
+				"type" : "color",
+				"value" : "0.23137254901960785 0.5019607843137255 0.6823529411764706"
+			},
+			"colorsettings" : 
+			{
+				"index" : 2,
+				"order" : 102,
+				"text" : "Show Color Settings",
+				"type" : "bool",
+				"value" : true
+			},
+			"huerange" : 
+			{
+				"condition" : "colorsettings.value == true",
+				"fraction" : false,
+				"index" : 3,
+				"max" : 360,
+				"min" : 0,
+				"order" : 103,
+				"text" : "Hue Range",
+				"type" : "slider",
+				"value" : 120
+			},
+			"lightnessrange" : 
+			{
+				"condition" : "colorsettings.value == true",
+				"fraction" : false,
+				"index" : 5,
+				"max" : 100,
+				"min" : 0,
+				"order" : 105,
+				"text" : "Lightness Range",
+				"type" : "slider",
+				"value" : 70
+			},
+			"numlines" : 
+			{
+				"fraction" : false,
+				"index" : 0,
+				"max" : 100,
+				"min" : 10,
+				"order" : 100,
+				"text" : "Number of Lines",
+				"type" : "slider",
+				"value" : 20
+			},
+			"saturationrange" : 
+			{
+				"condition" : "colorsettings.value == true",
+				"fraction" : false,
+				"index" : 4,
+				"max" : 100,
+				"min" : 0,
+				"order" : 104,
+				"text" : "Saturation Range",
+				"type" : "slider",
+				"value" : 70
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		}
+	},
+	"title" : "Lines",
+	"type" : "web",
+	"version" : 0
+}

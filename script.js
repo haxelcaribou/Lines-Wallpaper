@@ -8,7 +8,7 @@ const c = canvas.getContext("2d");
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
 
-const colorSettings = {
+var colorSettings = {
   h: 160,
   s: 65,
   l: 50,
@@ -17,7 +17,7 @@ const colorSettings = {
   lVar: 50
 };
 
-const wallpaperSettings = {
+var wallpaperSettings = {
   numLines: 10,
   newLineProb: 1 / 50,
   lineSpeed: 500,
@@ -41,6 +41,13 @@ function getColor() {
   return "hsl(" + h + "," + s + "%," + l + "%)";
 }
 
+function updateColors() {
+  lines.forEach(function(n) {
+    n.c1 = getColor();
+    n.c2 = getColor();
+  });
+}
+
 function constructLines() {
   lines = [];
   let lineSize = canvas.height / wallpaperSettings.numLines;
@@ -58,25 +65,24 @@ function constructLines() {
   }
 }
 
-function updateLines() {
-  lines.forEach(function(l) {
-    if (l.p > 0) {
-      l.p -= l.v;
+function updateLinePos() {
+  lines.forEach(function(n) {
+    if (n.p > 0) {
+      n.p -= n.v;
     } else if (Math.random() <= wallpaperSettings.newLineProb) {
-      l.p = 1;
-      l.c1 = l.c2;
-      l.c2 = getColor();
+      n.p = 1;
+      n.c1 = n.c2;
+      n.c2 = getColor();
     }
   });
 }
 
 function drawLines() {
-  let i;
-  lines.forEach(function(l) {
-    c.fillStyle = l.c1;
-    c.fillRect(0, l.y, canvas.width * l.p, l.h);
-    c.fillStyle = l.c2;
-    c.fillRect(canvas.width * l.p, l.y, canvas.width * (1 - l.p), l.h);
+  lines.forEach(function(n) {
+    c.fillStyle = n.c1;
+    c.fillRect(0, n.y, canvas.width * n.p, n.h);
+    c.fillStyle = n.c2;
+    c.fillRect(canvas.width * n.p, n.y, canvas.width * (1 - n.p), n.h);
   });
 }
 
@@ -97,37 +103,39 @@ function step() {
     fpsThreshold -= 1.0 / wallpaperSettings.fps;
   }
 
-  updateLines();
+  updateLinePos();
   drawLines();
 }
 
 function rgbToHsl(r, g, b) {
-  let max = Math.max(r, g, b);
-  let min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
+  let cmin = Math.min(r,g,b),
+      cmax = Math.max(r,g,b),
+      delta = cmax - cmin,
+      h = 0,
+      s = 0,
+      l = 0;
 
-  if (max == min) {
-    h = s = 0; // achromatic
-  } else {
-    var d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (delta == 0)
+      h = 0;
+    else if (cmax == r)
+      h = ((g - b) / delta) % 6;
+    else if (cmax == g)
+      h = (b - r) / delta + 2;
+    else
+      h = (r - g) / delta + 4;
 
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
-    }
+    h = Math.round(h * 60);
 
-    h /= 6;
-  }
+    h = mod(h, 360);
 
-  return [h, s, l];
+    l = (cmax + cmin) / 2;
+
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+
+    return [h, s, l];
 }
 
 window.wallpaperPropertyListener = {
@@ -140,21 +148,20 @@ window.wallpaperPropertyListener = {
     if (properties.color) {
       let p = properties.color.value.split(" ");
 
-      let r = p[0];
-      let g = p[1];
-      let b = p[2];
-
       let v = rgbToHsl(p[0], p[1], p[2]);
 
       colorSettings.h = v[0];
       colorSettings.s = v[1];
       colorSettings.l = v[2];
+
+      updateColors();
     }
     if (properties.numlines) {
       wallpaperSettings.numLines = properties.numlines.value;
+      constructLines();
     }
     if (properties.temp) { // TODO: rename the thing
-      wallpaperSettings.newLineProb = properties.temp.value;
+      //wallpaperSettings.newLineProb = properties.temp.value;
     }
     if (properties.speed) {
       let value = properties.speed.value;
@@ -162,14 +169,17 @@ window.wallpaperPropertyListener = {
     }
     if (properties.huerange) {
       colorSettings.hVar = properties.huerange.value;
+      updateColors();
     }
     if (properties.saturationrange) {
       colorSettings.sVar = properties.saturationrange.value;
+      updateColors();
     }
     if (properties.lightnessrange) {
       colorSettings.lVar = properties.lightnessrange.value;
+      updateColors();
     }
-  }
+  },
 }
 
 window.onResize = function() {
