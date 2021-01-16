@@ -1,9 +1,9 @@
 const canvas = document.getElementById("canvas");
 const c = canvas.getContext("2d");
 
-const numLines = 10;
-const newLineProb = 1 / 50;
-const lineSpeed = 500;
+// TODO
+// do the speed math
+// update display on variable change
 
 const colorSettings = {
   h: 160,
@@ -147,14 +147,26 @@ window.wallpaperPropertyListener = {
       colorSettings.s = v[1];
       colorSettings.l = v[2];
     }
-  },
-  if (properties.numlines) {
-    wallpaperSettings.numLines = properties.numlines.value;
-  },
-  if (properties.speed) {
-    let value = properties.speed.value;
-    wallpaperSettings.lineSpeed = value;
-  },
+    if (properties.numlines) {
+      wallpaperSettings.numLines = properties.numlines.value;
+    }
+    if (properties.temp) { // TODO: rename the thing
+      wallpaperSettings.newLineProb = properties.temp.value;
+    }
+    if (properties.speed) {
+      let value = properties.speed.value;
+      wallpaperSettings.lineSpeed = value;
+    }
+    if (properties.huerange) {
+      colorSettings.hVar = properties.huerange.value;
+    }
+    if (properties.saturationrange) {
+      colorSettings.sVar = properties.saturationrange.value;
+    }
+    if (properties.lightnessrange) {
+      colorSettings.lVar = properties.lightnessrange.value;
+    }
+  }
 }
 
 window.onResize = function() {
