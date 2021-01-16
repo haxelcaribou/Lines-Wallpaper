@@ -5,6 +5,9 @@ const c = canvas.getContext("2d");
 // do the speed math
 // update display on variable change
 
+var last = performance.now() / 1000;
+var fpsThreshold = 0;
+
 const colorSettings = {
   h: 160,
   s: 65,
