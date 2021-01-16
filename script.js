@@ -4,7 +4,7 @@ const c = canvas.getContext("2d");
 // TODO
 // update color settings without full color reset
 // update line number without full reset
-// fix excessive max and min hsl values at high variances
+// fix excessive max and min s/l values at high variances
 // add color support
 // switch speed from percent to pixel
 
@@ -200,11 +200,23 @@ window.wallpaperPropertyListener = {
       updateColors();
     }
     if (properties.saturationrange) {
-      colorSettings.sVar = properties.saturationrange.value;
+      let saturationRange = properties.saturationrange.value;
+      if (saturationRange / 2 > colorSettings.s) {
+        colorSettings.s = saturationRange / 2;
+      } else if (colorSettings.s + saturationRange / 2 > 100) {
+        colorSettings.s = 100 - saturationRange / 2;
+      }
+      colorSettings.sVar = saturationRange;
       updateColors();
     }
     if (properties.lightnessrange) {
-      colorSettings.lVar = properties.lightnessrange.value;
+      let lightnessRange = properties.lightnessrange.value;
+      if (lightnessRange / 2 > colorSettings.l) {
+        colorSettings.l = lightnessRange / 2;
+      } else if (colorSettings.l + lightnessRange / 2 > 100) {
+        colorSettings.l = 100 - lightnessRange / 2;
+      }
+      colorSettings.lVar = lightnessRange;
       updateColors();
     }
   },
