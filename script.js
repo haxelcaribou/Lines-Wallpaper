@@ -69,7 +69,7 @@ function constructLines() {
       y: i * lineSize,
       h: lineSize,
       p: Math.round(Math.random()*canvas.width),
-      v: wallpaperSettings.lineSpeed
+      v: wallpaperSettings.lineSpeed / 2 + Math.random() * wallpaperSettings.lineSpeed / 2
     };
     lines.push(info);
   }
