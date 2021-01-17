@@ -6,7 +6,6 @@ const c = canvas.getContext("2d");
 // update line number without full reset
 // fix excessive max and min s/l values at high variances
 // add color support
-// switch speed from percent to pixel
 
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
@@ -23,7 +22,7 @@ var colorSettings = {
 var wallpaperSettings = {
   numLines: 10,
   newLineProb: 1 / 50,
-  lineSpeed: 2,
+  lineSpeed: 1,
   direction: "rtl",
   fps: 0
 };
@@ -53,7 +52,7 @@ function updateColors() {
 }
 
 function updateSpeed(pSpeed, speed) {
-  let m = Math.pow(speed,2) / Math.pow(pSpeed,2);
+  let m = speed / pSpeed;
   lines.forEach(function(n) {
     n.v *= m;
   });
@@ -62,7 +61,6 @@ function updateSpeed(pSpeed, speed) {
 function constructLines() {
   lines = [];
   let lineSize = canvas.height / wallpaperSettings.numLines;
-  let lineSpeed = Math.pow(wallpaperSettings.lineSpeed,2);
   let i;
   for (i = 0; i < wallpaperSettings.numLines; i += 1) {
     let info = {
@@ -70,8 +68,8 @@ function constructLines() {
       c2: getColor(),
       y: i * lineSize,
       h: lineSize,
-      p: Math.random(),
-      v: 1 / (20000 + Math.random() * 20000) * lineSpeed
+      p: Math.round(Math.random()*canvas.width),
+      v: wallpaperSettings.lineSpeed
     };
     lines.push(info);
   }
@@ -83,14 +81,14 @@ function updateLinePos() {
       if (n.p > 0) {
         n.p -= n.v;
       } else if (Math.random() <= wallpaperSettings.newLineProb) {
-        n.p = 1;
+        n.p = canvas.width;
         n.c1 = n.c2;
         n.c2 = getColor();
       }
     });
   } else {
     lines.forEach(function(n) {
-      if (n.p < 1) {
+      if (n.p < canvas.width) {
         n.p += n.v;
       } else if (Math.random() <= wallpaperSettings.newLineProb) {
         n.p = 0;
@@ -104,9 +102,9 @@ function updateLinePos() {
 function drawLines() {
   lines.forEach(function(n) {
     c.fillStyle = n.c1;
-    c.fillRect(0, n.y, canvas.width * n.p, n.h);
+    c.fillRect(0, n.y, n.p, n.h);
     c.fillStyle = n.c2;
-    c.fillRect(canvas.width * n.p, n.y, canvas.width * (1 - n.p), n.h);
+    c.fillRect(n.p, n.y, canvas.width - n.p, n.h);
   });
 }
 
