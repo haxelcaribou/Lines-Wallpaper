@@ -99,7 +99,7 @@
 			{
 				"fraction" : true,
 				"index" : 1,
-				"max" : 2.5,
+				"max" : 5,
 				"min" : 0.10000000000000001,
 				"order" : 101,
 				"precision" : 2,
@@ -114,7 +114,7 @@
 	"tags" : [ "Abstract" ],
 	"title" : "Lines",
 	"type" : "web",
-	"version" : 3,
+	"version" : 4,
 	"visibility" : "public",
 	"workshopid" : "2363969356",
 	"workshopurl" : "steam://url/CommunityFilePage/2363969356"
