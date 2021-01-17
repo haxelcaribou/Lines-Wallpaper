@@ -4,7 +4,6 @@ const c = canvas.getContext("2d");
 // TODO
 // update color settings without full color reset
 // update line number without full reset
-// fix excessive max and min s/l values at high variances
 // add color support
 
 var last = performance.now() / 1000;
@@ -38,9 +37,30 @@ function clamp(v, l, h) {
 }
 
 function getColor() {
+  let sBase = colorSettings.s;
+  let lBase = colorSettings.l;
+  let sVar = colorSettings.sVar;
+  let lVar = colorSettings.lVar;
+
+  if (sVar / 2 > sBase) {
+    sBase = (sBase + sVar / 2) / 2;
+    sVar = colorSettings.s + sVar / 2;
+  } else if (sBase + sVar / 2 > 100) {
+    sBase = 100 - ((100 - sBase) + sVar / 2) / 2;
+    sVar = (100 - colorSettings.s) + sVar / 2;
+  }
+
+  if (lVar / 2 > lBase) {
+    lBase = (lBase + lVar / 2) / 2;
+    lVar = colorSettings.l + lVar / 2;
+  } else if (lBase + lVar / 2 > 100) {
+    lBase = 100 - ((100 - lBase) + lVar / 2) / 2;
+    lVar = (100 - colorSettings.l) + lVar / 2;
+  }
+
   let h = mod(colorSettings.h + Math.random() * colorSettings.hVar - colorSettings.hVar / 2, 360);
-  let s = clamp(colorSettings.s + Math.random() * colorSettings.sVar - colorSettings.sVar / 2, 0, 100);
-  let l = clamp(colorSettings.l + Math.random() * colorSettings.lVar - colorSettings.lVar / 2, 0, 100);
+  let s = clamp(sBase + Math.random() * sVar - sVar / 2, 0, 100);
+  let l = clamp(lBase + Math.random() * lVar - lVar / 2, 0, 100);
   return "hsl(" + h + "," + s + "%," + l + "%)";
 }
 
@@ -200,21 +220,17 @@ window.wallpaperPropertyListener = {
     if (properties.saturationrange) {
       let saturationRange = properties.saturationrange.value;
       if (saturationRange / 2 > colorSettings.s) {
-        colorSettings.s = saturationRange / 2;
+        colorSettings.s = (colorSettings.s + saturationRange / 2) / 2;
+        colorSettings.sVar = colorSettings.s + saturationRange / 2;
       } else if (colorSettings.s + saturationRange / 2 > 100) {
-        colorSettings.s = 100 - saturationRange / 2;
+        colorSettings.s = 100 - ((100 - colorSettings.s) + saturationRange / 2) / 2;
+        colorSettings.sVar = (100 - colorSettings.s) + saturationRange / 2;
       }
-      colorSettings.sVar = saturationRange;
+      colorSettings.sVar = properties.saturationrange.value;
       updateColors();
     }
     if (properties.lightnessrange) {
-      let lightnessRange = properties.lightnessrange.value;
-      if (lightnessRange / 2 > colorSettings.l) {
-        colorSettings.l = lightnessRange / 2;
-      } else if (colorSettings.l + lightnessRange / 2 > 100) {
-        colorSettings.l = 100 - lightnessRange / 2;
-      }
-      colorSettings.lVar = lightnessRange;
+      colorSettings.lVar = properties.lightnessrange.value;
       updateColors();
     }
   },
