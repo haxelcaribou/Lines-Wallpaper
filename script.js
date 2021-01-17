@@ -5,6 +5,7 @@ const c = canvas.getContext("2d");
 // update color settings without full color reset
 // update line number without full reset
 // add color support
+// basic performance and cleanliness improvements
 
 var last = performance.now() / 1000;
 var fpsThreshold = 0;
@@ -29,7 +30,7 @@ var wallpaperSettings = {
 var lines = [];
 
 function mod(n1, n2) {
-  return ((n1 % n2) + n2) % n2;
+  return (n1 % n2 + n2) % n2;
 }
 
 function clamp(v, l, h) {
@@ -83,15 +84,14 @@ function constructLines() {
   let lineSize = canvas.height / wallpaperSettings.numLines;
   let i;
   for (i = 0; i < wallpaperSettings.numLines; i += 1) {
-    let info = {
+    lines.push({
       c1: getColor(),
       c2: getColor(),
       y: i * lineSize,
       h: lineSize,
-      p: Math.round(Math.random()*canvas.width),
+      p: Math.round(Math.random() * canvas.width),
       v: wallpaperSettings.lineSpeed / 2 + Math.random() * wallpaperSettings.lineSpeed / 2
-    };
-    lines.push(info);
+    });
   }
 }
 
@@ -131,12 +131,10 @@ function drawLines() {
 function step() {
   window.requestAnimationFrame(step);
 
-  // Figure out how much time has passed since the last animation
   let now = performance.now() / 1000;
   let dt = Math.min(now - last, 1);
   last = now;
 
-  // Abort updating the animation if we have reached the desired FPS
   if (wallpaperSettings.fps > 0) {
     fpsThreshold += dt;
     if (fpsThreshold < 1.0 / wallpaperSettings.fps) {
@@ -150,34 +148,34 @@ function step() {
 }
 
 function rgbToHsl(r, g, b) {
-  let cmin = Math.min(r,g,b),
-      cmax = Math.max(r,g,b),
-      delta = cmax - cmin,
-      h = 0,
-      s = 0,
-      l = 0;
+  let cmin = Math.min(r, g, b),
+    cmax = Math.max(r, g, b),
+    delta = cmax - cmin,
+    h = 0,
+    s = 0,
+    l = 0;
 
-    if (delta == 0)
-      h = 0;
-    else if (cmax == r)
-      h = ((g - b) / delta) % 6;
-    else if (cmax == g)
-      h = (b - r) / delta + 2;
-    else
-      h = (r - g) / delta + 4;
+  if (delta == 0)
+    h = 0;
+  else if (cmax == r)
+    h = ((g - b) / delta) % 6;
+  else if (cmax == g)
+    h = (b - r) / delta + 2;
+  else
+    h = (r - g) / delta + 4;
 
-    h = Math.round(h * 60);
+  h = Math.round(h * 60);
 
-    h = mod(h, 360);
+  h = mod(h, 360);
 
-    l = (cmax + cmin) / 2;
+  l = (cmax + cmin) / 2;
 
-    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+  s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
 
-    s = Math.round(s * 100);
-    l = Math.round(l * 100);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
 
-    return [h, s, l];
+  return [h, s, l];
 }
 
 window.wallpaperPropertyListener = {
@@ -202,9 +200,6 @@ window.wallpaperPropertyListener = {
       wallpaperSettings.numLines = properties.numlines.value;
       constructLines();
     }
-    if (properties.temp) { // TODO: rename the thing
-      //wallpaperSettings.newLineProb = properties.temp.value;
-    }
     if (properties.speed) {
       let pSpeed = wallpaperSettings.lineSpeed;
       wallpaperSettings.lineSpeed = properties.speed.value;
@@ -218,14 +213,6 @@ window.wallpaperPropertyListener = {
       updateColors();
     }
     if (properties.saturationrange) {
-      let saturationRange = properties.saturationrange.value;
-      if (saturationRange / 2 > colorSettings.s) {
-        colorSettings.s = (colorSettings.s + saturationRange / 2) / 2;
-        colorSettings.sVar = colorSettings.s + saturationRange / 2;
-      } else if (colorSettings.s + saturationRange / 2 > 100) {
-        colorSettings.s = 100 - ((100 - colorSettings.s) + saturationRange / 2) / 2;
-        colorSettings.sVar = (100 - colorSettings.s) + saturationRange / 2;
-      }
       colorSettings.sVar = properties.saturationrange.value;
       updateColors();
     }
