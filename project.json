@@ -1,121 +1,108 @@
 {
-	"contentrating" : "Everyone",
-	"description" : "Colorful lines that move across the screen\n\n[url=https://github.com/piethrower/Lines-Wallpaper]Github Repository[/url]",
-	"file" : "index.html",
-	"general" : 
-	{
-		"properties" : 
-		{
-			"color" : 
-			{
-				"index" : 3,
-				"order" : 103,
-				"text" : "Color",
-				"type" : "color",
-				"value" : "0.23137254901960785 0.5019607843137255 0.6823529411764706"
-			},
-			"colorsettings" : 
-			{
-				"index" : 4,
-				"order" : 104,
-				"text" : "Show Color Settings",
-				"type" : "bool",
-				"value" : true
-			},
-			"direction" : 
-			{
-				"index" : 2,
-				"options" : 
-				[
-					{
-						"label" : "Right to Left",
-						"value" : "rtl"
-					},
-					{
-						"label" : "Left to Right",
-						"value" : "ltr"
-					}
-				],
-				"order" : 102,
-				"text" : "Direction",
-				"type" : "combo",
-				"value" : "rtl"
-			},
-			"huerange" : 
-			{
-				"condition" : "colorsettings.value == true",
-				"fraction" : false,
-				"index" : 5,
-				"max" : 360,
-				"min" : 0,
-				"order" : 105,
-				"text" : "Hue Range",
-				"type" : "slider",
-				"value" : 120
-			},
-			"lightnessrange" : 
-			{
-				"condition" : "colorsettings.value == true",
-				"fraction" : false,
-				"index" : 7,
-				"max" : 100,
-				"min" : 0,
-				"order" : 107,
-				"text" : "Lightness Range",
-				"type" : "slider",
-				"value" : 70
-			},
-			"numlines" : 
-			{
-				"fraction" : false,
-				"index" : 0,
-				"max" : 100,
-				"min" : 10,
-				"order" : 100,
-				"text" : "Number of Lines",
-				"type" : "slider",
-				"value" : 20
-			},
-			"saturationrange" : 
-			{
-				"condition" : "colorsettings.value == true",
-				"fraction" : false,
-				"index" : 6,
-				"max" : 100,
-				"min" : 0,
-				"order" : 106,
-				"text" : "Saturation Range",
-				"type" : "slider",
-				"value" : 70
-			},
-			"schemecolor" : 
-			{
-				"order" : 0,
-				"text" : "ui_browse_properties_scheme_color",
-				"type" : "color",
-				"value" : "0 0 0"
-			},
-			"speed" : 
-			{
-				"fraction" : true,
-				"index" : 1,
-				"max" : 5,
-				"min" : 0.10000000000000001,
-				"order" : 101,
-				"precision" : 2,
-				"step" : 0.10000000000000001,
-				"text" : "Speed",
-				"type" : "slider",
-				"value" : 1
-			}
-		}
-	},
-	"preview" : "preview.jpg",
-	"tags" : [ "Abstract" ],
-	"title" : "Lines",
-	"type" : "web",
-	"version" : 4,
-	"visibility" : "public",
-	"workshopid" : "2363969356",
-	"workshopurl" : "steam://url/CommunityFilePage/2363969356"
+  "contentrating": "Everyone",
+  "description": "Colorful lines that move across the screen\n\n[url=https://github.com/piethrower/Lines-Wallpaper]Github Repository[/url]",
+  "file": "index.html",
+  "general": {
+    "properties": {
+      "color": {
+        "index": 3,
+        "order": 103,
+        "text": "Color",
+        "type": "color",
+        "value": "0.23137254901960785 0.5019607843137255 0.6823529411764706"
+      },
+      "colorsettings": {
+        "index": 4,
+        "order": 104,
+        "text": "Show Color Settings",
+        "type": "bool",
+        "value": true
+      },
+      "direction": {
+        "index": 2,
+        "options": [{
+            "label": "Right to Left",
+            "value": "rtl"
+          },
+          {
+            "label": "Left to Right",
+            "value": "ltr"
+          }
+        ],
+        "order": 102,
+        "text": "Direction",
+        "type": "combo",
+        "value": "rtl"
+      },
+      "huerange": {
+        "condition": "colorsettings.value == true",
+        "fraction": false,
+        "index": 5,
+        "max": 360,
+        "min": 0,
+        "order": 105,
+        "text": "Hue Range",
+        "type": "slider",
+        "value": 120
+      },
+      "lightnessrange": {
+        "condition": "colorsettings.value == true",
+        "fraction": false,
+        "index": 7,
+        "max": 100,
+        "min": 0,
+        "order": 107,
+        "text": "Lightness Range",
+        "type": "slider",
+        "value": 70
+      },
+      "numlines": {
+        "fraction": false,
+        "index": 0,
+        "max": 100,
+        "min": 10,
+        "order": 100,
+        "text": "Number of Lines",
+        "type": "slider",
+        "value": 20
+      },
+      "saturationrange": {
+        "condition": "colorsettings.value == true",
+        "fraction": false,
+        "index": 6,
+        "max": 100,
+        "min": 0,
+        "order": 106,
+        "text": "Saturation Range",
+        "type": "slider",
+        "value": 70
+      },
+      "schemecolor": {
+        "order": 0,
+        "text": "ui_browse_properties_scheme_color",
+        "type": "color",
+        "value": "0 0 0"
+      },
+      "speed": {
+        "fraction": true,
+        "index": 1,
+        "max": 5,
+        "min": 0.10000000000000001,
+        "order": 101,
+        "precision": 2,
+        "step": 0.10000000000000001,
+        "text": "Speed",
+        "type": "slider",
+        "value": 1
+      }
+    }
+  },
+  "preview": "preview.jpg",
+  "tags": ["Abstract"],
+  "title": "Lines",
+  "type": "web",
+  "version": 4,
+  "visibility": "public",
+  "workshopid": "2363969356",
+  "workshopurl": "steam://url/CommunityFilePage/2363969356"
 }
