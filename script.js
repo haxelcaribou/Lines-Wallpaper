@@ -66,17 +66,17 @@ function getColor() {
 }
 
 function updateColors() {
-  lines.forEach(function(n) {
-    n.c1 = getColor();
-    n.c2 = getColor();
-  });
+  for(let line of lines) {
+    line.c1 = getColor();
+    line.c2 = getColor();
+  }
 }
 
 function updateSpeed(pSpeed, speed) {
   let m = speed / pSpeed;
-  lines.forEach(function(n) {
-    n.v *= m;
-  });
+  for(let line of lines) {
+    line.v *= m;
+  }
 }
 
 function constructLines() {
@@ -97,35 +97,35 @@ function constructLines() {
 
 function updateLinePos() {
   if (wallpaperSettings.direction == "rtl") {
-    lines.forEach(function(n) {
-      if (n.p > 0) {
-        n.p -= n.v;
+    for(let line of lines) {
+      if (line.p > 0) {
+        line.p -= line.v;
       } else if (Math.random() <= wallpaperSettings.newLineProb) {
-        n.p = canvas.width;
-        n.c1 = n.c2;
-        n.c2 = getColor();
+        line.p = canvas.width;
+        line.c1 = line.c2;
+        line.c2 = getColor();
       }
-    });
+    }
   } else {
-    lines.forEach(function(n) {
-      if (n.p < canvas.width) {
-        n.p += n.v;
+    for(let line of lines) {
+      if (line.p < canvas.width) {
+        line.p += line.v;
       } else if (Math.random() <= wallpaperSettings.newLineProb) {
-        n.p = 0;
-        n.c2 = n.c1;
-        n.c1 = getColor();
+        line.p = 0;
+        line.c2 = line.c1;
+        line.c1 = getColor();
       }
-    });
+    }
   }
 }
 
 function drawLines() {
-  lines.forEach(function(n) {
-    c.fillStyle = n.c1;
-    c.fillRect(0, n.y, n.p, n.h);
-    c.fillStyle = n.c2;
-    c.fillRect(n.p, n.y, canvas.width - n.p, n.h);
-  });
+  for(let line of lines) {
+    c.fillStyle = line.c1;
+    c.fillRect(0, line.y, line.p, line.h);
+    c.fillStyle = line.c2;
+    c.fillRect(line.p, line.y, canvas.width - line.p, line.h);
+  }
 }
 
 function step() {
