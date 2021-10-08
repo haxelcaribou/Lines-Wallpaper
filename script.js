@@ -82,8 +82,8 @@ function updateSpeed(pSpeed, speed) {
 function constructLines() {
   lines = [];
   let lineSize = canvas.height / wallpaperSettings.numLines;
-  let i;
-  for (i = 0; i < wallpaperSettings.numLines; i += 1) {
+  let numLines = wallpaperSettings.numLines;
+  for (let i = 0; i < numLines; i += 1) {
     lines.push({
       c1: getColor(),
       c2: getColor(),
